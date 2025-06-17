@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
     context, // O 'contexto' atual sabe onde estamos na arvore de widgets.
     MaterialPageRoute(
       // O 'builder' e' uma funcao que constroi a tela para a qual queremos ir.
-      builder: (context) => const DetalheFilmePage(),
+      builder: (context) => DetalhePagina(filme: filme),
     ),
   );
 },
