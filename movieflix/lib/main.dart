@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'detalhe_filme_pagina.dart';
-void main() => runApp(const MovieFlixApp());
+
+Future<void> main() async {
+  // 1. A main agora e' 'async'
+  // 2. Espera carregar as variaveis do arquivo .env
+  await dotenv.load(fileName: ".env");
+  runApp(const MovieFlixApp());
+}
 
 // Este e o widget raiz do nosso app
 class MovieFlixApp extends StatelessWidget {
@@ -37,7 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _buscarFilmesPopulares() async {
     // Sua chave de API do TMDB
-    const apiKey = '6ceadc41cf0872e0a149f2cb4782846e'; 
+    final apiKey = dotenv.env['THEMOVIETMDB_API_KEY'];
 
     final url = Uri.parse(
       'https://api.themoviedb.org/3/movie/popular?api_key=$apiKey&language=pt-BR&page=1',
@@ -66,13 +72,13 @@ class _HomePageState extends State<HomePage> {
       });
       print('Erro de conexao: $e');
     }
-
   }
-    @override
-    void initState() {
-      super.initState(); // Esta linha e' obrigatoria
-      _buscarFilmesPopulares(); // Chamamos nossa funcao aqui
-    }
+
+  @override
+  void initState() {
+    super.initState(); // Esta linha e' obrigatoria
+    _buscarFilmesPopulares(); // Chamamos nossa funcao aqui
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,28 +113,28 @@ class _HomePageState extends State<HomePage> {
                   // Em vez de um Container cinza, agora retornamos a imagem do poster!
                   return InkWell(
                     onTap: () {
-  // Navigator.push e' o comando para ir para uma nova tela.
-  Navigator.push(
-    context, // O 'contexto' atual sabe onde estamos na arvore de widgets.
-    MaterialPageRoute(
-      // O 'builder' e' uma funcao que constroi a tela para a qual queremos ir.
-      builder: (context) => DetalhePagina(filme: filme),
-    ),
-  );
-},
-                  child: Card(
-                  elevation: 5,
-                    child: ClipRRect(
-                      // Para deixar a imagem com bordas arredondadas
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.network(
-                        urlPoster,
-                        fit:
-                            BoxFit
-                                .cover, // Garante que a imagem cubra todo o espaco
+                      // Navigator.push e' o comando para ir para uma nova tela.
+                      Navigator.push(
+                        context, // O 'contexto' atual sabe onde estamos na arvore de widgets.
+                        MaterialPageRoute(
+                          // O 'builder' e' uma funcao que constroi a tela para a qual queremos ir.
+                          builder: (context) => DetalhePagina(filme: filme),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      elevation: 5,
+                      child: ClipRRect(
+                        // Para deixar a imagem com bordas arredondadas
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: Image.network(
+                          urlPoster,
+                          fit:
+                              BoxFit
+                                  .cover, // Garante que a imagem cubra todo o espaco
+                        ),
                       ),
                     ),
-                  )  
                   );
                 },
               ),
