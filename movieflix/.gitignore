@@ -43,3 +43,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Ignorar arquivos de ambiente com segredos
+.env
+# Adicionando a variação que estava no repositório
+.ENV 
